@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+/* Headings: Gabarito (bold, tight tracking). Body: Bitter (serif, relaxed).
+   Latin subset only, to avoid shipping unused character sets. */
+@import "@fontsource/gabarito/latin-700.css";
+@import "@fontsource/gabarito/latin-800.css";
+@import "@fontsource/bitter/latin-400.css";
+@import "@fontsource/bitter/latin-500.css";
+@import "@fontsource/bitter/latin-700.css";
+
+@theme {
+  --font-heading: "Gabarito", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Bitter", ui-serif, Georgia, serif;
+
+  --color-cream: #fef7e6;
+  --color-orange: #eead58;
+  --color-orange-hover: #cc8959;
+  --color-teal: #004347;
+  --color-plum: #671e5b;
+
+  /* Fluid type scale: comfortable on mobile, matches the brand scale on desktop. */
+  --text-h1: clamp(2.25rem, 1.45rem + 3.25vw, 3.75rem);
+  --text-h1--line-height: 1.15;
+  --text-h1--font-weight: 800;
+
+  --text-h2: clamp(2rem, 1.5rem + 2vw, 3rem);
+  --text-h2--line-height: 1.2;
+  --text-h2--font-weight: 800;
+
+  --text-h3: clamp(1.375rem, 1.15rem + 0.9vw, 1.75rem);
+  --text-h3--line-height: 1.25;
+  --text-h3--font-weight: 800;
+
+  --text-h4: 1.125rem;
+  --text-h4--line-height: 1.35;
+  --text-h4--font-weight: 700;
+
+  --text-lead: clamp(1.125rem, 1rem + 0.5vw, 1.375rem);
+  --text-lead--line-height: 1.5;
+}
+
+:root {
+  /* Lets height:auto participate in transitions (used by the accordion below). */
+  interpolate-size: allow-keywords;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-body);
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-teal);
+    letter-spacing: 0.04em;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+  }
+
+  /* Respect users who've asked for reduced motion. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  /* Buttons share one shape; only colour varies by context. */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-full px-7 py-3 font-body text-base font-medium transition-colors duration-150;
+  }
+
+  .btn-cta {
+    @apply bg-orange text-plum hover:bg-orange-hover;
+  }
+
+  .btn-peek {
+    @apply bg-orange text-cream hover:bg-plum;
+  }
+
+  .btn-outline {
+    @apply border-2 border-cream bg-transparent text-cream hover:bg-cream hover:text-teal;
+  }
+
+  /* Form fields on the dark "grab a coffee" section. */
+  .field-input {
+    @apply w-full rounded-full border-2 border-cream/70 bg-transparent px-5 py-3 text-base text-cream placeholder-cream/50 outline-none transition-colors focus-visible:border-orange;
+  }
+
+  .field-textarea {
+    @apply w-full rounded-3xl border-2 border-cream/70 bg-transparent px-5 py-3 text-base text-cream placeholder-cream/50 outline-none transition-colors focus-visible:border-orange;
+  }
+
+  .field-label {
+    @apply mb-2 block font-body text-base;
+  }
+
+  /* Accordion rows in "Behind the scenes", built on native <details>. */
+  .accordion-item {
+    @apply border-b border-teal/30 py-7;
+  }
+
+  .accordion-item summary {
+    @apply flex cursor-pointer list-none items-center justify-between gap-6 font-heading font-bold text-teal;
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+    line-height: 1.25;
+  }
+
+  .accordion-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .accordion-icon {
+    @apply relative h-4 w-4 shrink-0;
+  }
+
+  .accordion-icon::before,
+  .accordion-icon::after {
+    content: "";
+    @apply absolute top-1/2 left-1/2 h-px w-4 -translate-x-1/2 -translate-y-1/2 bg-teal transition-transform duration-400;
+  }
+
+  .accordion-icon::after {
+    @apply rotate-90;
+  }
+
+  details[open] .accordion-icon::after {
+    @apply rotate-0;
+  }
+
+  /* Native CSS-only accordion animation: ::details-content is the browser's
+     own generated box wrapping everything after <summary>. Transitioning
+     its height between 0 and "auto" (via interpolate-size above) animates
+     open/close without any JS, and transition-behavior: allow-discrete lets
+     content-visibility flip at the right moment so text isn't clipped mid
+     animation. Browsers without support just show/hide instantly. */
+  .accordion-item::details-content {
+    height: 0;
+    overflow: hidden;
+    transition:
+      height 300ms ease,
+      content-visibility 300ms ease;
+    transition-behavior: allow-discrete;
+  }
+
+  .accordion-item[open]::details-content {
+    height: auto;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .accordion-item::details-content {
+      transition: none;
+    }
+  }
+}
