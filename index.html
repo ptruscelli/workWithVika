@@ -180,7 +180,7 @@
               <p>But these examples should give you a good feel for how I approach things.</p>
               <p>And if you want the full picture, then feel free to look at my CV.</p>
             </div>
-            <a href="./V-Sokolova-CV-website.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-peek mt-8">
+            <a href="./V-Sokolova-CV.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-peek mt-8">
               Take a peek
             </a>
           </div>
@@ -456,8 +456,23 @@
               Why don't we talk through your project over a (virtual) coffee and see if we're a good fit?
             </p>
 
-            <!-- Visual only for now; wiring up submission comes later. -->
-            <form class="mx-auto mt-8 max-w-md space-y-6 lg:mx-0">
+
+            <form
+              id="contact-form"
+              action="https://formspree.io/f/xlgykoed"
+              method="POST"
+              class="mx-auto mt-8 max-w-md space-y-6 lg:mx-0"
+            >
+              <input type="hidden" name="_subject" value="New message from your website" />
+              <input
+                type="text"
+                name="_gotcha"
+                class="hidden"
+                tabindex="-1"
+                autocomplete="off"
+                aria-hidden="true"
+              />
+
               <div>
                 <label for="name" class="field-label text-cream">
                   What should I call you? <span class="text-sm text-cream/60">(required)</span>
@@ -478,7 +493,13 @@
               </div>
 
               <button type="submit" class="btn btn-outline">Chat soon!</button>
+
+              <p id="form-error" class="text-sm text-cream/80" role="alert" hidden></p>
             </form>
+
+            <p id="form-success" class="mx-auto mt-8 max-w-md text-lg text-cream lg:mx-0" role="status" hidden>
+              Thank you!
+            </p>
           </div>
 
           <div>
@@ -499,5 +520,7 @@
         <p class="mt-1 text-sm text-teal/70">Bristol-based · Remote</p>
       </div>
     </footer>
+
+    <script type="module" src="./src/main.js"></script>
   </body>
 </html>
